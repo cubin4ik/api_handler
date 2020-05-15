@@ -4,6 +4,9 @@ from xml.etree import ElementTree
 from xml.parsers import expat
 import json
 
+# TODO: Add key verification
+# TODO: Add multi-query request (urllib.parse.encode)
+
 
 class RequestAPI:
     """Handles links, parameters and connections to source API"""
@@ -37,11 +40,22 @@ class RequestAPI:
 
         return data.read().decode(enc)
 
+
+class ParseAPI(RequestAPI):
+    """Parsing any API response"""
+
+    def __init__(self, api, **kwargs):
+        super().__init__(api, **kwargs)
+
     def parse_xml(self):
-        pass
+        """Parses json objects"""
+
+        self.resp = self.resp_raw
 
     def parse_json(self):
-        pass
+        """Parses json objects"""
+
+        self.resp = self.resp_raw
 
 
 # source_api = 'https://jsonplaceholder.typicode.com/comments'
@@ -49,5 +63,5 @@ source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
 par = 'date_req'
 day = '05/03/2002'
 
-my_req = RequestAPI(source_api, query=f'{par}={day}')
+my_req = ParseAPI(source_api, query=f'{par}={day}')
 print(my_req.resp_raw)
