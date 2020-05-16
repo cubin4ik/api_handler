@@ -8,14 +8,14 @@ import json
 # TODO: Add multi-query request (urllib.parse.encode)
 
 
-class RequestAPI:
+class RequestAPI(object):
     """Handles links, parameters and connections to source API"""
 
     def __init__(self, api, **kwargs):
         self.api = api
         self.pars = kwargs
         self.url = self.build_link()
-        self.resp_raw = self.get_resp()
+        self.resp = self.get_resp()
 
     def build_link(self):
         """Returns full url to connect and get data"""
@@ -30,6 +30,7 @@ class RequestAPI:
                         fragment=api_fragment)
 
         url = url_pars._replace(**self.pars)
+
         return parse.urlunsplit(url)
 
     def get_resp(self):
@@ -47,21 +48,43 @@ class ParseAPI(RequestAPI):
     def __init__(self, api, **kwargs):
         super().__init__(api, **kwargs)
 
-    def parse_xml(self):
-        """Parses json objects"""
+        if self.resp[0] == '<':
+            self.root = self.parse_xml()
+        else:
+            self.root = self.parse_json()
 
-        self.resp = self.resp_raw
+    def parse_xml(self):
+        """Parses xml objects"""
+
+        return ElementTree.fromstring(self.resp)
 
     def parse_json(self):
         """Parses json objects"""
 
-        self.resp = self.resp_raw
+        return self.resp
 
 
 # source_api = 'https://jsonplaceholder.typicode.com/comments'
 source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
 par = 'date_req'
-day = '05/03/2002'
+value = '16/05/2020'
 
-my_req = ParseAPI(source_api, query=f'{par}={day}')
-print(my_req.resp_raw)
+pars = {
+    'query': f'{par}={value}'
+}
+
+my_req = ParseAPI(source_api, **pars)
+# my_req = ParseAPI(source_api)
+
+# For XML data type processing
+
+print(my_req.root.tag, my_req.root.attrib)
+
+for child in my_req.root:
+    currency = child.find('CharCode').text
+    value = child.find('Value').text
+    print(f'{currency}: {value}')
+    print('-' * 20)
+
+# For JSON data processing
+# print(my_req.root)
