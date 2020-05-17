@@ -61,14 +61,14 @@ class ParseAPI(RequestAPI):
     def parse_json(self):
         """Parses json objects"""
 
-        return self.resp
+        return json.loads(self.resp)
 
 
 def controller():
     """Apps main controller"""
 
-    # source_api = 'https://jsonplaceholder.typicode.com/comments'
-    source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
+    source_api = 'https://jsonplaceholder.typicode.com/comments'
+    # source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
     par = 'date_req'
     value = datetime.today().strftime('%d/%m/%Y')
 
@@ -76,21 +76,22 @@ def controller():
         'query': f'{par}={value}'
     }
 
-    my_req = ParseAPI(source_api, **pars)
-    # my_req = ParseAPI(source_api)
+    # my_req = ParseAPI(source_api, **pars)
+    my_req = ParseAPI(source_api)
 
     # For XML data type processing
 
-    print(my_req.root.tag, my_req.root.attrib)
-
-    for child in my_req.root:
-        currency = child.find('CharCode').text
-        value = child.find('Value').text
-        print(f'{currency}: {value}')
-        print('-' * 20)
+    # print(my_req.root.tag, my_req.root.attrib)
+    #
+    # for child in my_req.root:
+    #     currency = child.find('CharCode').text
+    #     value = child.find('Value').text
+    #     print(f'{currency}: {value}')
+    #     print('-' * 20)
 
     # For JSON data processing
-    # print(my_req.root)
+    for data in my_req.root:
+        print(data['postId'])
 
 
 if __name__ == '__main__':
