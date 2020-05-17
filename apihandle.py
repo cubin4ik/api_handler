@@ -64,7 +64,7 @@ class ParseAPI(RequestAPI):
         return json.loads(self.resp)
 
 
-def controller():
+def processor():
     """Apps main controller"""
 
     source_api = 'https://jsonplaceholder.typicode.com/comments'
@@ -95,4 +95,4 @@ def controller():
 
 
 if __name__ == '__main__':
-    controller()
+    processor()
