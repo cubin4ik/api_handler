@@ -1,7 +1,7 @@
 from urllib import request, parse
 from collections import namedtuple
+from datetime import datetime
 from xml.etree import ElementTree
-from xml.parsers import expat
 import json
 
 # TODO: Add key verification
@@ -64,27 +64,34 @@ class ParseAPI(RequestAPI):
         return self.resp
 
 
-# source_api = 'https://jsonplaceholder.typicode.com/comments'
-source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
-par = 'date_req'
-value = '16/05/2020'
+def controller():
+    """Apps main controller"""
 
-pars = {
-    'query': f'{par}={value}'
-}
+    # source_api = 'https://jsonplaceholder.typicode.com/comments'
+    source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
+    par = 'date_req'
+    value = datetime.today().strftime('%d/%m/%Y')
 
-my_req = ParseAPI(source_api, **pars)
-# my_req = ParseAPI(source_api)
+    pars = {
+        'query': f'{par}={value}'
+    }
 
-# For XML data type processing
+    my_req = ParseAPI(source_api, **pars)
+    # my_req = ParseAPI(source_api)
 
-print(my_req.root.tag, my_req.root.attrib)
+    # For XML data type processing
 
-for child in my_req.root:
-    currency = child.find('CharCode').text
-    value = child.find('Value').text
-    print(f'{currency}: {value}')
-    print('-' * 20)
+    print(my_req.root.tag, my_req.root.attrib)
 
-# For JSON data processing
-# print(my_req.root)
+    for child in my_req.root:
+        currency = child.find('CharCode').text
+        value = child.find('Value').text
+        print(f'{currency}: {value}')
+        print('-' * 20)
+
+    # For JSON data processing
+    # print(my_req.root)
+
+
+if __name__ == '__main__':
+    controller()
