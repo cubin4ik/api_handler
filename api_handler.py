@@ -1,3 +1,7 @@
+""" Module to fetch API data from any source given
+    using just a link provided and parametersq
+"""
+
 from urllib import request, parse
 from collections import namedtuple
 from datetime import datetime
