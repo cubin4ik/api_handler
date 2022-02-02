@@ -47,7 +47,7 @@ class RequestAPI(object):
 
 
 class ParseAPI(RequestAPI):
-    """Parsing any API response"""
+    """Parsing any API response using parent module to fetch data silently"""
 
     def __init__(self, api, **kwargs):
         super().__init__(api, **kwargs)
@@ -68,35 +68,37 @@ class ParseAPI(RequestAPI):
         return json.loads(self.resp)
 
 
-def processor():
-    """Apps main controller"""
+def example():
+    """Example of usage"""
 
-    source_api = 'https://jsonplaceholder.typicode.com/comments'
-    # source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
-    par = 'date_req'
-    value = datetime.today().strftime('%d/%m/%Y')
+    # provide a link to request json or xml, below are examples for both
+    # source_api = 'https://jsonplaceholder.typicode.com/comments'
+    source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
 
+    # provide parameters (key, value) to be given to a server, below we provide today's date
+    par_name = 'date_req'
+    par_value = datetime.today().strftime('%d/%m/%Y')
     pars = {
-        'query': f'{par}={value}'
+        'query': f'{par_name}={par_value}'
     }
 
-    # my_req = ParseAPI(source_api, **pars)
-    my_req = ParseAPI(source_api)
+    my_req = ParseAPI(source_api, **pars)
+    # my_req = ParseAPI(source_api)
 
     # For XML data type processing
 
-    # print(my_req.root.tag, my_req.root.attrib)
-    #
-    # for child in my_req.root:
-    #     currency = child.find('CharCode').text
-    #     value = child.find('Value').text
-    #     print(f'{currency}: {value}')
-    #     print('-' * 20)
+    print(my_req.root.tag, my_req.root.attrib)
+
+    for child in my_req.root:
+        currency = child.find('CharCode').text
+        par_value = child.find('Value').text
+        print(f'{currency}: {par_value}')
+        print('-' * 20)
 
     # For JSON data processing
-    for data in my_req.root:
-        print(data['postId'])
+    # for data in my_req.root:
+    #     print(data['postId'])
 
 
 if __name__ == '__main__':
-    processor()
+    example()
