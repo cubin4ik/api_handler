@@ -1,6 +1,5 @@
-""" Module to fetch API data from any source given
-    using just a link provided and parametersq
-"""
+# Module to quickly fetch API data from any source given
+# using just a link provided and parameters
 
 from urllib import request, parse
 from collections import namedtuple
@@ -72,7 +71,7 @@ def example():
     """Example of usage"""
 
     # provide a link to request json or xml, below are examples for both
-    # source_api = 'https://jsonplaceholder.typicode.com/comments'
+    # for json example use https://jsonplaceholder.typicode.com/comments
     source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
 
     # provide parameters (key, value) to be given to a server, below we provide today's date
@@ -83,10 +82,8 @@ def example():
     }
 
     my_req = ParseAPI(source_api, **pars)
-    # my_req = ParseAPI(source_api)
 
     # For XML data type processing
-
     print(my_req.root.tag, my_req.root.attrib)
 
     for child in my_req.root:
@@ -95,7 +92,7 @@ def example():
         print(f'{currency}: {par_value}')
         print('-' * 20)
 
-    # For JSON data processing
+    # For JSON data type processing use the code below
     # for data in my_req.root:
     #     print(data['postId'])
 
