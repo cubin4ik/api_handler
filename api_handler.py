@@ -70,22 +70,15 @@ class ParseAPI(RequestAPI):
 def example():
     """Example of usage"""
 
-    # provide a link to request json or xml, below are examples for both
-    # for json example use https://jsonplaceholder.typicode.com/comments
     source_api = 'http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002'
-
-    # provide parameters (key, value) to be given to a server, below we provide today's date
     par_name = 'date_req'
     par_value = datetime.today().strftime('%d/%m/%Y')
-    pars = {
-        'query': f'{par_name}={par_value}'
-    }
 
-    my_req = ParseAPI(source_api, **pars)
+    pars = {'query': f'{par_name}={par_value}'}
+    my_req = ParseAPI(source_api, **pars)  # a single line to get data from API
 
     # For XML data type processing
     print(my_req.root.tag, my_req.root.attrib)
-
     for child in my_req.root:
         currency = child.find('CharCode').text
         par_value = child.find('Value').text
